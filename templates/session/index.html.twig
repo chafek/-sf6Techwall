@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block head %}
+    {% block title %}visites{% endblock %}
+    
+{% endblock %}
+
+{% block body %}
+    <h1 class="text-center">visite</h1>
+    bonjour, votre site compte {{app.session.get('nbVisite')}} visites!
+        
+{% endblock %}
+
+

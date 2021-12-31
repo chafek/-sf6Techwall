@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello TabController!{% endblock %}
+
+{% block body %}
+
+<table class="table">
+
+{% for tableau in tab %}
+    <tr>
+    <td>{{tableau}}</td>
+</tr>
+{% endfor %}
+</table >
+<div class="alert alert-info">
+    <p>nombre de notes: {{tab|length}}</p>
+    <p>notes minimale: {{min(tab)}}</p>
+    <p>notes minimale: {{max(tab)}}</p>
+</div>
+
+    
+
+
+
+{% endblock %}
