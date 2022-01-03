@@ -82,6 +82,7 @@ class TodoController extends AbstractController
             $todos=$session->get('todos');
             if (!key_exists($name,$todos))
             {
+                
                 $this->addFlash('error',"le todo '$name' n'existe pas!");
             }else
             {

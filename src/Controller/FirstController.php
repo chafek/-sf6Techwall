@@ -9,23 +9,34 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class FirstController extends AbstractController
 {
+
+    #[Route('/template', name: 'template')]
+    public function template(): Response
+    {
+            return $this->render('template.html.twig');
+        
+       
+    }
+
     #[Route('/first', name: 'first')]
     public function index(): Response
     {
-       
-
             return $this->render('first/index.html.twig', [
                 'controller_name' => 'FirstController',
+                'name'=>'idoubrahim',
+                'firstname'=>'chafek'
             ]);
         
        
     }
 
-    #[Route('/sayHello/{name}/{firstname}', name: 'hello')]
+    // #[Route('/sayHello/{name}/{firstname}', name: 'hello')]
     public function say_hello(Request $request,$name,$firstname): Response
     {
-       
-        return $this->render('first/index.html.twig',['name'=>$name,'firstname'=>$firstname]);
+
+        return $this->render('first/index.html.twig',[
+            'name'=>$name,
+            'firstname'=>$firstname]);
     }
     #[Route('/multiplication/{n1<\d+>}/{n2<\d+>}',name:'multiplication')]
         public function multiplication($n1,$n2){

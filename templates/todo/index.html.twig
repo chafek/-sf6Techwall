@@ -1,27 +1,10 @@
-{% extends 'base.html.twig' %}
+{% extends 'template.html.twig' %}
 
-{% block title %}Hello TodoController!{% endblock %}
+
 
 {% block body %}
-
-    {% for message in app.session.flashBag.get('error') %}
-        <div class="alert alert-danger" role="alert">
-            {{message}}
-        </div>
-    {% endfor %}
-    {% for message in app.session.flashBag.get('danger') %}
-        <div class="alert alert-warning" role="alert">
-            {{message}}
-        </div>
-    {% endfor %}
-    {% for message in app.session.flashBag.get('success') %}
-        <div class="alert alert-success" role="alert">
-            {{message}}
-        </div>
-    {% endfor %}
-
-    <h1 class='text-center'>Todo list</h1>
-
+    
+    
     <ul class="list-group">
     {% for cat,data in app.session.get('todos') %}
         <h4>{{cat}}</h4><li class="list-group-item">+{{data}}</li>
@@ -30,3 +13,6 @@
     </ul>
 
 {% endblock %}
+
+{% block title %}todo{% endblock %}
+{% block pageTitle %}<h1 class='text-center'>Todo list</h1>{% endblock %}

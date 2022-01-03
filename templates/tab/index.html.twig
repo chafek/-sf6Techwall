@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'template.html.twig' %}
 
 {% block title %}Hello TabController!{% endblock %}
 
@@ -8,12 +8,21 @@
 
 {% for tableau in tab %}
     <tr>
-    <td>{{tableau}}</td>
+    <td>{{tableau}}
+    {% if tableau is odd %}->impaire 
+    {% else %} ->paire
+    {% endif %}</td>
 </tr>
 {% endfor %}
+
 </table >
 <div class="alert alert-info">
-    <p>nombre de notes: {{tab|length}}</p>
+    <p>nombre de notes: {% if tab|length<10  %}
+     {{tab|length}}:<span class="text-danger">la note {{tab|length}} est inférieure à 10</span>
+    {% else %}
+     {{tab|length}}:<span class="text-success">super,note superieure à 10!</span>
+    {% endif %}
+    </p>
     <p>notes minimale: {{min(tab)}}</p>
     <p>notes minimale: {{max(tab)}}</p>
 </div>

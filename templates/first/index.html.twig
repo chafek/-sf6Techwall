@@ -1,13 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>my first controller</title>
+
   
-</head>
-<body>
-    <h1>hello {{name|title}}&nbsp{{firstname|capitalize}}</h1>
-</body>
-</html>
+   
+   {% block pageTitle%}
+       <h1 class="text-center text-info">page First</h1>
+   {% endblock %}
+   
+   {% block body %}
+       <h5>hello {{name}}&nbsp{{firstname}}</h5>
+       <p>mon lien absolu est {{url('first')}}</p>
+   {% endblock body%}
+   

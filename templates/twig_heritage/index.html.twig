@@ -1,0 +1,8 @@
+{% extends "heritage.html.twig" %}
+
+{% block titreDuDocument %}mon titre modifié{% endblock %}
+{% block corpDuDocument %}
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam temporibus fugit minus quo dolores repellendus excepturi harum deleniti, rem error accusantium rerum quam sit eligendi quis, quos vero reiciendis odit!
+    <br><br><br><br>
+    {{parent()}}
+{% endblock %}
