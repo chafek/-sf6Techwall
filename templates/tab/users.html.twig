@@ -12,7 +12,7 @@
                 <td>Nom</td>
                 <td>Prenom</td>
                 <td>age</td>
-                <td>message</td>
+                {# <td>message</td> #}
         </thead>
         <tbody>
             {% for user in users %}
@@ -20,7 +20,7 @@
                 <td>{{user.lastname}}</td>
                 <td>{{user.firstname}}</td>
                 <td>{{user.age}}</td>
-                <td>{{render(controller("App\\Controller\\FirstController::say_hello",{'name':user.lastname,'firstname':user.firstname}))}}</td>
+               
             </tr>
             
             {% endfor %}

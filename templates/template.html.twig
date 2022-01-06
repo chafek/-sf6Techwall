@@ -59,8 +59,9 @@
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="{{path('first')}}">First</a>
-                                    <a class="nav-link" href="{{path('tab_users')}}">Users</a>
+                                    <a class="nav-link " href="{{path('first')}}">First</a>
+                                    <a class="nav-link " href="{{path('tab_users')}}">Users</a>
+                                    <a class="nav-link " href="{{path('list_personne_alls',{page:1})}}">Visiteurs</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
@@ -142,9 +143,28 @@
                                 {% endblock %}
                             </div>
                         </div>
-                        <div style="height: 100vh"></div>
-                        <div class="card mb-4"><div class="card-body">When scrolling, the navigation stays at the top of the page. This is the end of the static navigation demo.</div></div>
+                        {% if isPaginated %}
+                        <nav aria-label="Page navigation example center">
+        
+                        <ul class="pagination justify-content-center">
+                            {% if page>1 %}
+                                <li class="page-item"><a class="page-link" href="{{path('list_personne_alls',{page:page-1,nbre})}}">Previous</a></li>
+                            {% endif %}
+                            {% for i in 1..nbrePages %}
+                                <li class="page-item"><a class="page-link" href="{{path('list_personne_alls',{page:i,nbre})}}">{{i}}</a></li>
+                            {% endfor %}
+                            
+                            {% if page<nbrePages %}
+                            <li class="page-item"><a class="page-link" href="{{path('list_personne_alls',{page:page+1,nbre})}}">Next</a></li>
+                            {% endif %}
+                        </ul>
+                
+                        </nav>
+                        {% endif %}
+                        {# <div style="height: 100vh"></div>
+                        <div class="card mb-4"><div class="card-body">When scrolling, the navigation stays at the top of the page. This is the end of the static navigation demo.</div></div> #}
                     </div>
+                    
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
