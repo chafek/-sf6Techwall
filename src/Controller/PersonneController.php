@@ -2,20 +2,21 @@
 
 namespace App\Controller;
 
+use DateTime;
 use App\Entity\Personne;
 use App\Form\PersonneType;
-use App\Repository\PersonneRepository;
-use DateTime;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Repository\RepositoryFactory;
+use App\Repository\PersonneRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\Repository\RepositoryFactory;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 #[Route('/personne')]
 class PersonneController extends AbstractController
@@ -126,7 +127,7 @@ class PersonneController extends AbstractController
     }
 
     #[Route('/edit/{id<\d+>?0}', name: 'edit_personne')]
-    public function editPersonne(Request $request,ManagerRegistry $doctrine,$id): Response
+    public function editPersonne(SluggerInterface $slugger, Request $request,ManagerRegistry $doctrine,$id): Response
     {
             $repository=$doctrine->getRepository(Personne::class);
             $personne=$repository->find($id);
@@ -146,6 +147,33 @@ class PersonneController extends AbstractController
 
               if ($form->isSubmitted() && $form->isValid()) {
               
+                      /** @var UploadedFile $brochureFile */
+            $photo = $form->get('photo')->getData();
+
+            // this condition is needed because the 'brochure' field is not required
+            // so the PDF file must be processed only when a file is uploaded
+            if ($photo ) {
+                $originalFilename = pathinfo($photo ->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$brochureFile->guessExtension();
+
+                // Move the file to the directory where images are stored
+                try {
+                  $photo ->move(
+                        $this->getParameter('personne_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                // updates the 'brochureFilename' property to store the PDF file name
+                // instead of its contents
+                $personne->setImage($newFilename);
+            }
+
+
                 $entityManager->persist($personne);
                 $entityManager->flush();
                 $this->addFlash('success',$personne->getFirstname() ." a bien été modifié! ");
