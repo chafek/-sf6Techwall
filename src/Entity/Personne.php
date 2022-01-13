@@ -3,11 +3,18 @@
 namespace App\Entity;
 
 use App\Repository\PersonneRepository;
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PersonneRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Personne
 {
+
+    use TimeStampTrait;
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
@@ -22,8 +29,28 @@ class Personne
     #[ORM\Column(type: 'smallint')]
     private $age;
 
-    #[ORM\Column(type: 'string', length: 50, nullable: true)]
-    private $jog;
+ 
+
+    #[ORM\OneToOne(inversedBy: 'personne', targetEntity: Profile::class)]
+    private $profile;
+
+    #[ORM\ManyToMany(targetEntity: Hobby::class)]
+    private $hobby;
+
+    #[ORM\ManyToOne(targetEntity: Job::class, inversedBy: 'personnes')]
+    private $job;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $image;
+
+   
+
+    public function __construct()
+    {
+        $this->hobby = new ArrayCollection();
+    }
+
+   
 
     public function getId(): ?int
     {
@@ -66,15 +93,69 @@ class Personne
         return $this;
     }
 
-    public function getJog(): ?string
+   
+
+    public function getProfile(): ?Profile
     {
-        return $this->jog;
+        return $this->profile;
     }
 
-    public function setJog(?string $jog): self
+    public function setProfile(?Profile $profile): self
     {
-        $this->jog = $jog;
+        $this->profile = $profile;
 
         return $this;
     }
+
+    /**
+     * @return Collection|Hobby[]
+     */
+    public function getHobby(): Collection
+    {
+        return $this->hobby;
+    }
+
+    public function addHobby(Hobby $hobby): self
+    {
+        if (!$this->hobby->contains($hobby)) {
+            $this->hobby[] = $hobby;
+        }
+
+        return $this;
+    }
+
+    public function removeHobby(Hobby $hobby): self
+    {
+        $this->hobby->removeElement($hobby);
+
+        return $this;
+    }
+
+    public function getJob(): ?Job
+    {
+        return $this->job;
+    }
+
+    public function setJob(?Job $job): self
+    {
+        $this->job = $job;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+  
+
+    
 }

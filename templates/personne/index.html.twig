@@ -7,17 +7,40 @@
 {% block body %}
     <div class="row">
     {% for personne in personnes %}
-            <div class="card " style="width: 15rem;">
+            <div class="card " style="width: 19rem;">
             
                 <div class="card-body">
-                    <h5 class="card-title">{{personne.name}} {{personne.firstName}}</h5>
+                    <h4 class="card-title">{{personne.name}} {{personne.firstName}}</h4>
                     <p class="card-text card-center"><strong>Age</strong>:{{personne.age}} ans</p>
                     <p class="card-text card-center">le {{'now'|date('d/m/Y')}}</p>
                 </div>
-                <a  href="{{path('detail_personne',{id:personne.id})}} " class="btn btn-primary m-2">Détail</a>
+                <div class="btn-group btn-btn-group-sm  " role="group" >
+                <a  href="{{path('detail_personne',{id:personne.id})}} " class="btn btn-primary ">Détail</a>
+                <a  href="{{path('delete_personne',{id:personne.id})}} " class="btn btn-outline-danger ">Supprimer</a>
+                <a  href="{{path('edit_personne',{id:personne.id})}} " class="btn btn-outline-warning ">Modifier</a>
+                </div>
             </div> 
     {% endfor %}
 </div>
-
+{% block bottom_pagination %}
+     {% if isPaginated is defined and isPaginated %}
+                        <nav aria-label="Page navigation example center">
+        
+                        <ul class="pagination justify-content-center">
+                            {% if page>1 %}
+                                <li class="page-item"><a class="page-link" href="{{path('list_personne_alls',{page:page-1,nbre})}}">Previous</a></li>
+                            {% endif %}
+                            {% for i in 1..nbrePages %}
+                                <li class="page-item"><a class="page-link" href="{{path('list_personne_alls',{page:i,nbre})}}">{{i}}</a></li>
+                            {% endfor %}
+                            
+                            {% if page<nbrePages %}
+                            <li class="page-item"><a class="page-link" href="{{path('list_personne_alls',{page:page+1,nbre})}}">Next</a></li>
+                            {% endif %}
+                        </ul>
+                
+                        </nav>
+                        {% endif %}
+{% endblock %}
 
   {% endblock %}

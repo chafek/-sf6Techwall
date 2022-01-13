@@ -2,8 +2,10 @@
 
 namespace App\Repository;
 
-use App\Entity\Personne;
+use App\Entity\Personne ;
+
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,32 +21,41 @@ class PersonneRepository extends ServiceEntityRepository
         parent::__construct($registry, Personne::class);
     }
 
-    // /**
-    //  * @return Personne[] Returns an array of Personne objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findPersonByAgeInterval($ageMin,$ageMax)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $qd=$this->createQueryBuilder('p');  
+                $this->addIntervalAge($qd,$ageMin,$ageMax);
+                return $qd->getQuery()
+                ->getResult();  
+     }
 
-    /*
-    public function findOneBySomeField($value): ?Personne
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+     public function statPersonByAgeInterval($ageMin,$ageMax){
+            $qd=$this->createQueryBuilder('p');
+            $qd->select("avg(p.age) as ageMoyen,count(p.id) as nbrePersonne");
+            $this->addIntervalAge($qd,$ageMin,$ageMax);
+
+            return $qd->getQuery()->getScalarResult();
+                    
+
+     }
+
+   private function addIntervalAge(QueryBuilder $qd,$ageMin,$ageMax){
+           
+            $qd->andWhere("p.age > :ageMin and p.age < :ageMax");
+            $qd->setParameter('ageMin', $ageMin);
+            $qd->setParameter('ageMax', $ageMax);
+   }
+   
+
+    
+    // public function findOneBySomeField($value): ?Personne
+    // {
+    //     return $this->createQueryBuilder('p')
+    //         ->andWhere('p.exampleField = :val')
+    //         ->setParameter('val', $value)
+    //         ->getQuery()
+    //         ->getOneOrNullResult()
+    //     ;
+    // }
+  
 }

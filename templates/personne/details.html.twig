@@ -1,8 +1,8 @@
 {% extends "template.html.twig" %}
 
 {% block pageTitle %}<h3>Détail de <span class="text-primary fst-italic">{{personne.firstName}}</span> :</h3>{% endblock %}
-
 {% block body %}
+
 
 <div class="card mb-3" style="max-width: 540px;">
   <div class="row g-0">
@@ -12,7 +12,18 @@
     <div class="col-md-8">
       <div class="card-body">
         <h5 class="card-title">{{personne.firstName}}  {{personne.name}}</h5>
-        <p class="card-text">This is a wider card with supporting.</p>
+        <p class="card-text">{{personne.firstName}} a {{personne.age}} ans.</p>
+        <p><strong>Poste occupé</strong> : {{personne.getJob()}}</p>
+        <p><strong>hobbies</strong> :</p>
+          <ul>
+          
+             {% for hob in personne.getHobby() %}
+             <li>{{hob}}</li>
+              {% endfor %}
+          </ul>
+         
+         
+       
         <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
       </div>
     </div>

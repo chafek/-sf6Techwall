@@ -1,0 +1,36 @@
+{% extends "template.html.twig" %}
+
+{% block pageTitle %}
+    <h5 class="text-center text-primary mb-5 ">Statistiques généraux</h5> 
+{% endblock %}
+{% block body %}
+    {# <ul>
+        {% for st in stat %}
+        <li>age moyen : <strong>{{st.ageMoyen}}</strong></li>
+        <li>nbre de personnes : <strong>{{st.nbrePersonne}}</strong></li>
+        {% endfor %}
+    </ul> #}
+
+    <div class="row">
+                            <div class="col-xl-6 col-md-6">
+                                <div class="card bg-primary text-white mb-4">
+                                    <div class="card-body">Age moyen des personnes entre {{ageMin}} et {{ageMax}} ans </div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link">{% for stat in stats %}<strong>{{stat.ageMoyen}}</strong>{% endfor %}</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-md-6">
+                                <div class="card bg-danger text-white mb-4">
+                                    <div class="card-body">nombre de personnes</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                        <a class="small text-white stretched-link">{% for stat in stats %}<strong>{{stat.nbrePersonne}}</strong>{% endfor %}</a>
+                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                        </div>
+
+{% endblock %}
