@@ -7,6 +7,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PersonneRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -21,18 +22,32 @@ class Personne
     private $id;
 
     #[ORM\Column(type: 'string', length: 50)]
+    
+     /**
+     * @Assert\NotBlank(message="entrez une valeur!")
+     * @Assert\Length(min=4,minMessage="entrez 4 caracteres min")
+     */
+    
     private $firstname;
 
     #[ORM\Column(type: 'string', length: 50)]
+     /**
+     * @Assert\NotBlank(message="entrez une valeur!")
+     */
     private $name;
 
+
     #[ORM\Column(type: 'smallint')]
+     /**
+     * @Assert\NotBlank(message="entrez une valeur!")
+     * @Assert\GreaterThan(10,message="vous devez avoir plus de 10 ans")
+     */
     private $age;
 
  
 
     #[ORM\OneToOne(inversedBy: 'personne', targetEntity: Profile::class)]
-    private $profile;
+    private $profile;   
 
     #[ORM\ManyToMany(targetEntity: Hobby::class)]
     private $hobby;

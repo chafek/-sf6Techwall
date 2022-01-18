@@ -178,6 +178,7 @@ class PersonneController extends AbstractController
               //sinon, on affiche le formulaire
           
               if ($form->isSubmitted() && $form->isValid()) {
+                dd($personne);
                 $photo = $form->get('photo')->getData();
                 if ($photo ) {
               
