@@ -114,15 +114,19 @@ class PersonneController extends AbstractController
                 
                            /** @var UploadedFile $photo */
             $photo = $form->get('photo')->getData();
-                dd($photo);             
+ 
+                           
             // this condition is needed because the 'brochure' field is not required
             // so the PDF file must be processed only when a file is uploaded
             if ($photo ) {
+              
                 $originalFilename = pathinfo($photo ->getClientOriginalName(), PATHINFO_FILENAME);
+                
                 // this is needed to safely include the file name as part of the URL
                 $safeFilename = $slugger->slug($originalFilename);
+                
                 $newFilename = $safeFilename.'-'.uniqid().'.'.$photo->guessExtension();
-
+                
                 // Move the file to the directory where images are stored
                 try {
                   $photo ->move(
@@ -136,6 +140,7 @@ class PersonneController extends AbstractController
                 // updates the 'brochureFilename' property to store the PDF file name
                 // instead of its contents
                 $personne->setImage($newFilename);
+              
             }
                 $entityManager->persist($personne);
                 $entityManager->flush();
@@ -154,7 +159,7 @@ class PersonneController extends AbstractController
     }
 
     #[Route('/edit/{id<\d+>?0}', name: 'edit_personne')]
-    public function editPersonne( Request $request,ManagerRegistry $doctrine,$id): Response
+    public function editPersonne(SluggerInterface $slugger, Request $request,ManagerRegistry $doctrine,$id): Response
     {
             $repository=$doctrine->getRepository(Personne::class);
             $personne=$repository->find($id);
@@ -171,9 +176,35 @@ class PersonneController extends AbstractController
                 //rediriger vers la liste des personnes
                 //afficher un message de succes
               //sinon, on affiche le formulaire
-
+          
               if ($form->isSubmitted() && $form->isValid()) {
-            
+                $photo = $form->get('photo')->getData();
+                if ($photo ) {
+              
+                  $originalFilename = pathinfo($photo ->getClientOriginalName(), PATHINFO_FILENAME);
+                  
+                  // this is needed to safely include the file name as part of the URL
+                  $safeFilename = $slugger->slug($originalFilename);
+                  
+                  $newFilename = $safeFilename.'-'.uniqid().'.'.$photo->guessExtension();
+                  
+                  // Move the file to the directory where images are stored
+                  try {
+                    $photo ->move(
+                          $this->getParameter('personne_directory'),
+                          $newFilename
+                      );
+                  } catch (FileException $e) {
+                      // ... handle exception if something happens during file upload
+                  }
+  
+                  // updates the 'brochureFilename' property to store the PDF file name
+                  // instead of its contents
+                  $personne->setImage($newFilename);
+                
+              }
+                $personne->setImage($newFilename);
+           
                 $entityManager->persist($personne);
                 $entityManager->flush();
                 $this->addFlash('success',$personne->getFirstname() ." a bien été modifié! ");
